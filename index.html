@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anonymous Confession</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .box {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 12px;
+      width: 320px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 8px;
+      margin-bottom: 10px;
+      background: #111;
+      color: white;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #ff4d4d;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .confession {
+      background: #1a1a1a;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Send an Anonymous Confession</h2>
+
+<div class="box">
+  <textarea id="confessionInput" placeholder="Type your confession..."></textarea>
+  <button onclick="handleSubmit()">Submit</button>
+</div>
+
+<div id="confessionList" style="margin-top:20px; width:320px;"></div>
+
+<script>
+  const SECRET_PASSWORD = "09398718243";
+
+  function handleSubmit() {
+    const input = document.getElementById("confessionInput").value.trim();
+    if (!input) return alert("Write something first.");
+
+    // If password is typed → unlock admin view
+    if (input === SECRET_PASSWORD) {
+      showAllConfessions();
+      document.getElementById("confessionInput").value = "";
+      return;
+    }
+
+    // If "crush" is mentioned (case insensitive)
+    if (input.toLowerCase().includes("crush")) {
+      alert("confess kana kay zymon gagi");
+    }
+
+    // Save confession
+    let confessions = JSON.parse(localStorage.getItem("confessions")) || [];
+    confessions.push(input);
+    localStorage.setItem("confessions", JSON.stringify(confessions));
+
+    document.getElementById("confessionInput").value = "";
+    alert("Confession sent anonymously.");
+  }
+
+  function showAllConfessions() {
+    const confessionList = document.getElementById("confessionList");
+    confessionList.innerHTML = "<h3>All Confessions:</h3>";
+
+    const confessions = JSON.parse(localStorage.getItem("confessions")) || [];
+
+    confessions.forEach(msg => {
+      const div = document.createElement("div");
+      div.className = "confession";
+      div.innerText = msg;
+      confessionList.appendChild(div);
+    });
+  }
+</script>
+
+</body>
+</html>
